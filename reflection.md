@@ -4,15 +4,12 @@
 
 **a. Initial design**
 
-- Briefly describe your initial UML design.
-- What classes did you include, and what responsibilities did you assign to each?
-
-**b. Design changes**
-
-- Did your design change during implementation?
-- If yes, describe at least one change and why you made it.
-
----
+- I identified three core user actions from the README scenario:
+  1. Enter owner and pet info (who the owner is, what pet they have)
+  2. Add and edit tasks (walks, feeding, meds — each with a duration and priority)
+  3. Generate and view a daily schedule (a prioritized plan with reasoning)
+- These actions revealed four classes: Owner (holds pet info), Pet (holds tasks),
+  Task (one care activity with duration/priority), and Scheduler (generates the daily plan).
 
 ## 2. Scheduling Logic and Tradeoffs
 
