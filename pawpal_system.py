@@ -1,4 +1,5 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
+from datetime import date, timedelta
 from typing import List, Optional
 
 
@@ -104,4 +105,13 @@ class Scheduler:
         return result
 
     def handle_recurring_tasks(self, tasks: List[Task]) -> List[Task]:
-        pass
+        """For each completed recurring task, spawn a fresh incomplete copy for its next occurrence."""
+        offsets = {"daily": 1, "weekly": 7}
+        next_occurrences = []
+        for task in tasks:
+            if task.is_complete and task.frequency in offsets:
+                next_date = date.today() + timedelta(days=offsets[task.frequency])
+                new_task = replace(task, is_complete=False)
+                next_occurrences.append(new_task)
+                print(f"Recurring: '{task.description}' will repeat on {next_date} at {task.time}")
+        return next_occurrences
