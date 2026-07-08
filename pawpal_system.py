@@ -80,8 +80,14 @@ class Scheduler:
         """Return tasks ordered chronologically by their HH:MM time."""
         return sorted(tasks, key=lambda task: task.time)
 
-    def check_conflicts(self, tasks: List[Task]) -> bool:
-        pass
+    def check_conflicts(self, tasks: List[Task]) -> str:
+        """Return a warning if any tasks share the same start time, else all-clear."""
+        times = [task.time for task in tasks]
+        if len(times) == len(set(times)):
+            return "No conflicts detected."
+        clashing = sorted({t for t in times if times.count(t) > 1})
+        warnings = [f"Conflict: {times.count(t)} tasks scheduled at {t}" for t in clashing]
+        return " | ".join(warnings)
 
     def filter_tasks(
         self,
