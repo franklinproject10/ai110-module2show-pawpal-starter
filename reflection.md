@@ -20,8 +20,14 @@
 
 **b. Tradeoffs**
 
-- Describe one tradeoff your scheduler makes.
-- Why is that tradeoff reasonable for this scenario?
+- My conflict detection (`check_conflicts`) only flags tasks that share an _exact_
+  start time (e.g., two tasks both at 08:00). It does NOT detect overlapping
+  durations — a 30-minute walk starting at 08:00 and a task at 08:15 actually
+  clash, but my scheduler won't warn about it because their start times differ.
+- This tradeoff is reasonable for a lightweight pet-care app: it catches the most
+  common and obvious scheduling mistake (double-booking the same slot) with simple,
+  fast logic, while avoiding the added complexity of parsing durations and computing
+  time ranges. If the app grew, I would upgrade to interval-overlap detection.
 
 ---
 
