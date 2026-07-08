@@ -12,13 +12,13 @@ class Task:
     is_complete: bool = False
 
     def mark_complete(self) -> None:
-        pass
+        self.is_complete = True
 
     def edit_time(self, new_time: str) -> None:
-        pass
+        self.time = new_time
 
     def update_frequency(self, new_frequency: str) -> None:
-        pass
+        self.frequency = new_frequency
 
 
 @dataclass
@@ -29,13 +29,14 @@ class Pet:
     tasks: List[Task] = field(default_factory=list)
 
     def add_task(self, task: Task) -> None:
-        pass
+        self.tasks.append(task)
 
     def get_tasks(self) -> List[Task]:
-        pass
+        return self.tasks
 
     def remove_task(self, task: Task) -> None:
-        pass
+        if task in self.tasks:
+            self.tasks.remove(task)
 
 
 class Owner:
@@ -44,13 +45,14 @@ class Owner:
         self.pets = pets if pets is not None else []
 
     def add_pet(self, pet: Pet) -> None:
-        pass
+        self.pets.append(pet)
 
     def get_all_pets(self) -> List[Pet]:
-        pass
+        return self.pets
 
     def remove_pet(self, pet: Pet) -> None:
-        pass
+        if pet in self.pets:
+            self.pets.remove(pet)
 
 
 class Scheduler:
@@ -58,7 +60,11 @@ class Scheduler:
         self.owner = owner
 
     def get_todays_schedule(self) -> List[Task]:
-        pass
+        all_tasks = []
+        for pet in self.owner.get_all_pets():
+            for task in pet.get_tasks():
+                all_tasks.append(task)
+        return all_tasks
 
     def sort_by_time(self, tasks: List[Task]) -> List[Task]:
         pass
