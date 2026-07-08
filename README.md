@@ -105,3 +105,6 @@ Describe your app in numbered steps so a reader can follow along without watchin
 5. Add a pet and tasks, then view the generated daily schedule with conflict warnings.
 
 **Screenshot or video** _(optional)_: <!-- Insert a screenshot or link to a demo video here -->
+
+<img width="677" height="1512" alt="image" src="https://github.com/user-attachments/assets/0833fd33-3ddf-4ca8-b02f-b3c44b512a65" />
+
