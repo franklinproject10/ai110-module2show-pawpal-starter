@@ -77,13 +77,25 @@ class Scheduler:
         return all_tasks
 
     def sort_by_time(self, tasks: List[Task]) -> List[Task]:
-        pass
+        """Return tasks ordered chronologically by their HH:MM time."""
+        return sorted(tasks, key=lambda task: task.time)
 
     def check_conflicts(self, tasks: List[Task]) -> bool:
         pass
 
-    def filter_tasks(self, tasks: List[Task], priority: Optional[str] = None) -> List[Task]:
-        pass
+    def filter_tasks(
+        self,
+        tasks: List[Task],
+        priority: Optional[str] = None,
+        only_incomplete: bool = False,
+    ) -> List[Task]:
+        """Return tasks narrowed by optional priority and/or incomplete status."""
+        result = tasks
+        if priority is not None:
+            result = [task for task in result if task.priority == priority]
+        if only_incomplete:
+            result = [task for task in result if not task.is_complete]
+        return result
 
     def handle_recurring_tasks(self, tasks: List[Task]) -> List[Task]:
         pass
