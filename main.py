@@ -1,41 +1,45 @@
-"""Demo script for PawPal+ — builds a sample household and prints today's schedule."""
+"""Demo script for PawPal+ — showcases the Scheduler's sorting, conflict, and filter logic."""
 
 from pawpal_system import Owner, Pet, Task, Scheduler
 
 
 def main() -> None:
-    # 1. Create the owner
+    # Build the owner and pets
     owner = Owner("Frank")
-
-    # 2. Create two pets
     biscuit = Pet("Biscuit", "dog", "Golden Retriever")
     rex = Pet("Rex", "dog", "Labrador")
 
-    # 3. Add tasks with different times to each pet
+    # Add tasks DELIBERATELY out of order, with a time conflict at 08:00
+    biscuit.add_task(Task("Evening walk", "18:00", 20, "medium", "daily"))
     biscuit.add_task(Task("Morning walk", "08:00", 30, "high", "daily"))
-    biscuit.add_task(Task("Feeding", "09:00", 10, "high", "daily"))
     rex.add_task(Task("Meds", "07:30", 5, "high", "daily"))
-    rex.add_task(Task("Evening walk", "18:00", 20, "medium", "daily"))
+    rex.add_task(Task("Vet appointment", "08:00", 60, "high", "none"))  # conflicts with Morning walk
 
-    # 4. Register the pets with the owner
     owner.add_pet(biscuit)
     owner.add_pet(rex)
-
-    # 5. Build the scheduler (the "brain")
     scheduler = Scheduler(owner)
 
-    # 6. Print today's schedule, grouped by pet
-    print(f"=== Today's Schedule for {owner.name} ===\n")
-    for pet in owner.get_all_pets():
-        print(f"🐾 {pet.name} ({pet.breed}):")
-        for task in pet.get_tasks():
-            status = "done" if task.is_complete else "todo"
-            print(f"   {task.time} — {task.description} ({task.duration} min) [{task.priority}] ({status})")
-        print()  # blank line between pets
+    # Grab all tasks once
+    all_tasks = scheduler.get_todays_schedule()
 
-    # 7. Show the flat total from the Scheduler (proves get_todays_schedule works)
-    total = scheduler.get_todays_schedule()
-    print(f"Total tasks across all pets: {len(total)}")
+    # 1. Raw schedule (add-order — intentionally messy)
+    print("=== Raw Schedule (add order) ===")
+    for t in all_tasks:
+        print(f"   {t.time} — {t.description} [{t.priority}]")
+
+    # 2. Sorted schedule (chronological)
+    print("\n=== Sorted Schedule (by time) ===")
+    for t in scheduler.sort_by_time(all_tasks):
+        print(f"   {t.time} — {t.description} [{t.priority}]")
+
+    # 3. Conflict detection
+    print("\n=== Conflict Check ===")
+    print(f"   {scheduler.check_conflicts(all_tasks)}")
+
+    # 4. Filtered view — high priority only
+    print("\n=== High-Priority Tasks Only ===")
+    for t in scheduler.filter_tasks(all_tasks, priority="high"):
+        print(f"   {t.time} — {t.description} [{t.priority}]")
 
 
 if __name__ == "__main__":
